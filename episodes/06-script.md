@@ -1,64 +1,64 @@
 ---
-title: Shell Scripts
+title: Scripts Shell 
 teaching: 30
 exercises: 15
 ---
 
-::::::::::::::::::::::::::::::::::::::: objectives
+::::::::::::::::::::::::::::::::::::::: objectifs
 
-- Write a shell script that runs a command or series of commands for a fixed set of files.
-- Run a shell script from the command line.
-- Write a shell script that operates on a set of files defined by the user on the command line.
-- Create pipelines that include shell scripts you, and others, have written.
+- Écrire un script shell qui exécute une commande ou une série de commandes pour un ensemble fixe de fichiers.
+- Exécuter un script shell à partir de la ligne de commande.
+- Écrire un script shell qui fonctionne sur un ensemble de fichiers définis par l'utilisateur sur la ligne de commande.
+- Créer des pipelines qui incluent des scripts shell que vous et d'autres avez écrits.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I save and re-use commands?
+- Comment puis-je enregistrer et réutiliser des commandes ?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-We are finally ready to see what makes the shell such a powerful programming environment.
-We are going to take the commands we repeat frequently and save them in files
-so that we can re-run all those operations again later by typing a single command.
-For historical reasons,
-a bunch of commands saved in a file is usually called a **shell script**,
-but make no mistake --- these are actually small programs.
+Nous sommes enfin prêts à voir ce qui rend le shell si puissant en tant qu'environnement de programmation.
+Nous allons prendre les commandes que nous répétons fréquemment et les sauvegarder dans des fichiers
+afin de pouvoir réexécuter toutes ces opérations plus tard en tapant une seule commande.
+Pour des raisons historiques,
+un ensemble de commandes enregistrées dans un fichier est généralement appelé un **script shell**,
+mais ne vous trompez pas - il s'agit en réalité de petits programmes.
 
-Not only will writing shell scripts make your work faster, but also you won't have to retype
-the same commands over and over again. It will also make it more accurate (fewer chances for
-typos) and more reproducible. If you come back to your work later (or if someone else finds
-your work and wants to build on it), you will be able to reproduce the same results simply
-by running your script, rather than having to remember or retype a long list of commands.
+Non seulement l'écriture de scripts shell accélérera votre travail, mais vous n'aurez plus à retaper
+les mêmes commandes encore et encore. Cela les rendra également plus précis (moins de chances de faire des
+erreurs de frappe) et plus reproductibles. Si vous revenez à votre travail plus tard (ou si quelqu'un d'autre trouve
+votre travail et souhaite le poursuivre), vous pourrez reproduire les mêmes résultats simplement
+en exécutant votre script, plutôt que de devoir vous souvenir ou retaper une longue liste de commandes.
 
-Let's start by going back to `alkanes/` and creating a new file, `middle.sh` which will
-become our shell script:
+Commençons par retourner à `alkanes/` et créer un nouveau fichier, `middle.sh` qui sera
+notre script shell :
 
 ```bash
 $ cd alkanes
 $ nano middle.sh
 ```
 
-The command `nano middle.sh` opens the file `middle.sh` within the text editor 'nano'
-(which runs within the shell).
-If the file does not exist, it will be created.
-We can use the text editor to directly edit the file by inserting the following line:
+La commande `nano middle.sh` ouvre le fichier `middle.sh` dans l'éditeur de texte 'nano'
+(qui s'exécute dans le shell).
+Si le fichier n'existe pas, il sera créé.
+Nous pouvons utiliser l'éditeur de texte pour modifier directement le fichier en insérant la ligne suivante :
 
 ```source
 head -n 15 octane.pdb | tail -n 5
 ```
 
-This is a variation on the pipe we constructed earlier, which selects lines 11-15 of
-the file `octane.pdb`. Remember, we are *not* running it as a command just yet;
-we are only incorporating the commands in a file.
+Il s'agit d'une variation du pipeline que nous avons construit précédemment, qui sélectionne les lignes 11 à 15 du
+fichier `octane.pdb`. Rappelez-vous, nous ne l'exécutons pas encore comme une commande ;
+nous incorporons simplement les commandes dans un fichier.
 
-Then we save the file (`Ctrl-O` in nano) and exit the text editor (`Ctrl-X` in nano).
-Check that the directory `alkanes` now contains a file called `middle.sh`.
+Ensuite, nous enregistrons le fichier (`Ctrl-O` dans nano) et nous quittons l'éditeur de texte (`Ctrl-X` dans nano).
+Vérifiez que le répertoire `alkanes` contient maintenant un fichier appelé `middle.sh`.
 
-Once we have saved the file,
-we can ask the shell to execute the commands it contains.
-Our shell is called `bash`, so we run the following command:
+Une fois que nous avons enregistré le fichier,
+nous pouvons demander au shell d'exécuter les commandes qu'il contient.
+Notre shell s'appelle `bash`, donc nous exécutons la commande suivante :
 
 ```bash
 $ bash middle.sh
@@ -72,45 +72,38 @@ ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
 ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
 ```
 
-Sure enough,
-our script's output is exactly what we would get if we ran that pipeline directly.
+Effectivement,
+la sortie de notre script est exactement ce que nous obtiendrions si nous exécutions ce pipeline directement.
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Text vs. Whatever
+## Texte contre Autre
 
-We usually call programs like Microsoft Word or LibreOffice Writer "text
-editors", but we need to be a bit more careful when it comes to
-programming. By default, Microsoft Word uses `.docx` files to store not
-only text, but also formatting information about fonts, headings, and so
-on. This extra information isn't stored as characters and doesn't mean
-anything to tools like `head`, which expects input files to contain
-nothing but the letters, digits, and punctuation on a standard computer
-keyboard. When editing programs, therefore, you must either use a plain
-text editor or be careful to save files as plain text.
+Nous appelons généralement les programmes comme Microsoft Word ou LibreOffice Writer des "éditeurs de texte",
+mais nous devons être un peu plus prudents lorsqu'il s'agit de programmation. Par défaut, Microsoft Word utilise des fichiers `.docx` pour stocker non seulement le texte, mais aussi des informations de mise en forme sur les polices, les en-têtes, etc. Ces informations supplémentaires ne sont pas stockées sous forme de caractères et n'ont aucune signification pour des outils tels que `head`, qui attendent que les fichiers d'entrée ne contiennent rien d'autre que les lettres, les chiffres et la ponctuation d'un clavier d'ordinateur standard. Lorsque vous éditez des programmes, vous devez donc soit utiliser un éditeur de texte brut, soit veiller à enregistrer les fichiers au format texte brut.
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-What if we want to select lines from an arbitrary file?
-We could edit `middle.sh` each time to change the filename,
-but that would probably take longer than typing the command out again
-in the shell and executing it with a new file name.
-Instead, let's edit `middle.sh` and make it more versatile:
+Que se passe-t-il si nous voulons sélectionner des lignes à partir d'un fichier arbitraire ?
+Nous pourrions modifier `middle.sh` à chaque fois pour changer le nom du fichier,
+mais cela prendrait probablement plus de temps que de taper la commande à nouveau
+dans le shell et de l'exécuter avec un nouveau nom de fichier.
+À la place, nous allons modifier `middle.sh` pour le rendre plus polyvalent :
 
 ```bash
 $ nano middle.sh
 ```
 
-Now, within "nano", replace the text `octane.pdb` with the special variable called `$1`:
+Maintenant, dans "nano", remplacez le texte `octane.pdb` par la variable spéciale appelée `$1` :
 
 ```source
 head -n 15 "$1" | tail -n 5
 ```
 
-Inside a shell script,
-`$1` means 'the first filename (or other argument) on the command line'.
-We can now run our script like this:
+Dans un script shell,
+`$1` signifie 'le premier nom de fichier (ou autre argument) de la ligne de commande'.
+Maintenant, nous pouvons exécuter notre script de cette manière :
 
 ```bash
 $ bash middle.sh octane.pdb
@@ -124,7 +117,7 @@ ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
 ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
 ```
 
-or on a different file like this:
+ou sur un autre fichier de cette façon :
 
 ```bash
 $ bash middle.sh pentane.pdb
@@ -140,24 +133,23 @@ ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Double-Quotes Around Arguments
+## Guillemets autour des arguments
 
-For the same reason that we put the loop variable inside double-quotes,
-in case the filename happens to contain any spaces,
-we surround `$1` with double-quotes.
-
+Pour la même raison pour laquelle nous avons mis la variable de boucle entre guillemets,
+au cas où le nom de fichier contiendrait des espaces,
+nous entourons `$1` de guillemets.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Currently, we need to edit `middle.sh` each time we want to adjust the range of
-lines that is returned.
-Let's fix that by configuring our script to instead use three command-line arguments.
-After the first command-line argument (`$1`), each additional argument that we
-provide will be accessible via the special variables `$1`, `$2`, `$3`,
-which refer to the first, second, third command-line arguments, respectively.
+Actuellement, nous devons modifier `middle.sh` à chaque fois que nous voulons ajuster la plage de
+lignes retournées.
+Corrigeons cela en configurant notre script pour qu'il utilise plutôt trois arguments de ligne de commande.
+Après le premier argument de ligne de commande (`$1`), chaque argument supplémentaire que nous
+fournissons sera accessible via les variables spéciales `$1`, `$2`, `$3`,
+qui se réfèrent respectivement au premier, deuxième et troisième argument de ligne de commande.
 
-Knowing this, we can use additional arguments to define the range of lines to
-be passed to `head` and `tail` respectively:
+Sachant cela, nous pouvons utiliser des arguments supplémentaires pour définir la plage de lignes à
+passer à `head` et `tail`, respectivement :
 
 ```bash
 $ nano middle.sh
@@ -167,7 +159,7 @@ $ nano middle.sh
 head -n "$2" "$1" | tail -n "$3"
 ```
 
-We can now run:
+Nous pouvons maintenant exécuter :
 
 ```bash
 $ bash middle.sh pentane.pdb 15 5
@@ -181,8 +173,7 @@ ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
 ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
 ```
 
-By changing the arguments to our command, we can change our script's
-behaviour:
+en changeant les arguments de notre commande, nous pouvons modifier le comportement de notre script :
 
 ```bash
 $ bash middle.sh pentane.pdb 20 5
@@ -196,59 +187,59 @@ ATOM     17  H           1      -3.393   0.254  -0.321  1.00  0.00
 TER      18              1
 ```
 
-This works,
-but it may take the next person who reads `middle.sh` a moment to figure out what it does.
-We can improve our script by adding some **comments** at the top:
+Cela fonctionne,
+mais cela peut prendre un certain temps à la personne suivante qui lit `middle.sh` pour comprendre ce qu'il fait.
+Nous pouvons améliorer notre script en ajoutant quelques **commentaires** en haut :
 
 ```bash
 $ nano middle.sh
 ```
 
 ```source
-# Select lines from the middle of a file.
-# Usage: bash middle.sh filename end_line num_lines
+# Sélectionne des lignes du milieu d'un fichier.
+# Utilisation: bash middle.sh nom_fichier fin_ligne nombre_lignes
 head -n "$2" "$1" | tail -n "$3"
 ```
 
-A comment starts with a `#` character and runs to the end of the line.
-The computer ignores comments,
-but they're invaluable for helping people (including your future self) understand and use scripts.
-The only caveat is that each time you modify the script,
-you should check that the comment is still accurate. An explanation that sends
-the reader in the wrong direction is worse than none at all.
+Un commentaire commence par le caractère `#` et s'étend jusqu'à la fin de la ligne.
+L'ordinateur ignore les commentaires,
+mais ils sont précieux pour aider les personnes (y compris vous-même) à comprendre et à utiliser les scripts.
+La seule mise en garde est que chaque fois que vous modifiez le script,
+vous devez vérifier que le commentaire est toujours correct. Une explication qui envoie
+le lecteur dans la mauvaise direction est pire que pas d'explication du tout.
 
-What if we want to process many files in a single pipeline?
-For example, if we want to sort our `.pdb` files by length, we would type:
+Et si nous voulons traiter plusieurs fichiers dans un seul pipeline ?
+Par exemple, si nous voulons trier nos fichiers `.pdb` par longueur, nous taperions :
 
 ```bash
 $ wc -l *.pdb | sort -n
 ```
 
-because `wc -l` lists the number of lines in the files
-(recall that `wc` stands for 'word count', adding the `-l` option means 'count lines' instead)
-and `sort -n` sorts things numerically.
-We could put this in a file,
-but then it would only ever sort a list of `.pdb` files in the current directory.
-If we want to be able to get a sorted list of other kinds of files,
-we need a way to get all those names into the script.
-We can't use `$1`, `$2`, and so on
-because we don't know how many files there are.
-Instead, we use the special variable `$@`,
-which means,
-'All of the command-line arguments to the shell script'.
-We also should put `$@` inside double-quotes
-to handle the case of arguments containing spaces
-(`"$@"` is special syntax and is equivalent to `"$1"` `"$2"` ...).
+parce que `wc -l` liste le nombre de lignes dans les fichiers
+(remarquez que `wc` signifie "word count", en ajoutant l'option `-l` cela signifie "compter les lignes" à la place)
+et `sort -n` trie les choses numériquement.
+Nous pourrions mettre cela dans un fichier,
+mais alors il ne trierait toujours qu'une liste de fichiers `.pdb` dans le répertoire actuel.
+Si nous voulons être en mesure d'obtenir une liste triée d'autres types de fichiers,
+nous devons trouver un moyen d'obtenir tous ces noms dans le script.
+Nous ne pouvons pas utiliser `$1`, `$2`, etc.
+parce que nous ne connaissons pas le nombre de fichiers.
+À la place, nous utilisons la variable spéciale `$@`,
+qui signifie,
+"Tous les arguments de ligne de commande pour le script shell".
+Nous devons également mettre `$@` entre guillemets
+pour gérer le cas des arguments contenant des espaces
+(`"$@"` est une syntaxe spéciale et est équivalente à `"$1"` `"$2"` ...).
 
-Here's an example:
+Voici un exemple :
 
 ```bash
 $ nano sorted.sh
 ```
 
 ```source
-# Sort files by their length.
-# Usage: bash sorted.sh one_or_more_filenames
+# Trie les fichiers selon leur longueur.
+# Utilisation: bash sorted.sh un_ou_plusieurs_noms_de_fichier
 wc -l "$@" | sort -n
 ```
 
@@ -271,9 +262,9 @@ $ bash sorted.sh *.pdb ../creatures/*.dat
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## List Unique Species
+## Liste d'espèces uniques
 
-Leah has several hundred data files, each of which is formatted like this:
+Leah a plusieurs centaines de fichiers de données, chacun étant formaté comme suit :
 
 ```source
 2013-11-05,deer,5
@@ -286,31 +277,31 @@ Leah has several hundred data files, each of which is formatted like this:
 2013-11-07,bear,1
 ```
 
-An example of this type of file is given in
+Un exemple de ce type de fichier est donné dans
 `shell-lesson-data/exercise-data/animal-counts/animals.csv`.
 
-We can use the command `cut -d , -f 2 animals.csv | sort | uniq` to produce
-the unique species in `animals.csv`.
-In order to avoid having to type out this series of commands every time,
-a scientist may choose to write a shell script instead.
+Nous pouvons utiliser la commande `cut -d , -f 2 animals.csv | sort | uniq` pour produire
+la liste des espèces uniques dans `animals.csv`.
+Afin de ne pas devoir taper cette série de commandes à chaque fois,
+un scientifique peut choisir d'écrire un script shell à la place.
 
-Write a shell script called `species.sh` that takes any number of
-filenames as command-line arguments and uses a variation of the above command
-to print a list of the unique species appearing in each of those files separately.
+Écrivez un script shell appelé `species.sh` qui prend un nombre quelconque de
+noms de fichiers en ligne de commande et utilise une variante de la commande ci-dessus
+pour afficher une liste des espèces uniques apparaissant dans chacun de ces fichiers séparément.
 
 :::::::::::::::  solution
 
 ## Solution
 
 ```bash
-# Script to find unique species in csv files where species is the second data field
-# This script accepts any number of file names as command line arguments
+# Script pour trouver les espèces uniques dans les fichiers CSV où l'espèce est le deuxième champ de données
+# Ce script accepte de un à plusieurs noms de fichiers comme arguments de ligne de commande
 
-# Loop over all files
+# Boucle sur tous les fichiers
 for file in $@
 do
-    echo "Unique species in $file:"
-    # Extract species names
+    echo "Espèces uniques dans $file :"
+    # Extraction des noms d'espèces
     cut -d , -f 2 $file | sort | uniq
 done
 ```
@@ -319,19 +310,19 @@ done
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Suppose we have just run a series of commands that did something useful --- for example,
-creating a graph we'd like to use in a paper.
-We'd like to be able to re-create the graph later if we need to,
-so we want to save the commands in a file.
-Instead of typing them in again
-(and potentially getting them wrong)
-we can do this:
+Supposons que nous venons d'exécuter une série de commandes qui ont accompli quelque chose d'utile --- par exemple,
+créer un graphique que nous aimerions utiliser dans un article.
+Nous aimerions pouvoir recréer le graphique plus tard si nécessaire,
+donc nous voulons enregistrer les commandes dans un fichier.
+Au lieu de les saisir à nouveau
+(et risquer de les taper incorrectement),
+nous pouvons faire ceci :
 
 ```bash
-$ history | tail -n 5 > redo-figure-3.sh
+$ history | tail -n 5 > refaire-figure-3.sh
 ```
 
-The file `redo-figure-3.sh` now contains:
+Le fichier `refaire-figure-3.sh` contient maintenant :
 
 ```source
 297 bash goostats.sh NENE01729B.txt stats-NENE01729B.txt
@@ -341,33 +332,31 @@ The file `redo-figure-3.sh` now contains:
 301 history | tail -n 5 > redo-figure-3.sh
 ```
 
-After a moment's work in an editor to remove the serial numbers on the commands,
-and to remove the final line where we called the `history` command,
-we have a completely accurate record of how we created that figure.
+Après un peu de travail dans un éditeur pour supprimer les numéros de série des commandes,
+et pour supprimer la dernière ligne où nous avons appelé la commande `history`,
+nous disposons d'un enregistrement parfaitement précis de la façon dont nous avons créé ce graphique.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Why Record Commands in the History Before Running Them?
+## Pourquoi enregistrer les commandes dans l'historique avant de les exécuter ?
 
-If you run the command:
+Si vous exécutez la commande :
 
 ```bash
 $ history | tail -n 5 > recent.sh
 ```
 
-the last command in the file is the `history` command itself, i.e.,
-the shell has added `history` to the command log before actually
-running it. In fact, the shell *always* adds commands to the log
-before running them. Why do you think it does this?
+la dernière commande dans le fichier est la commande `history` elle-même, c'est-à-dire
+le shell a ajouté `history` au journal des commandes avant de l'exécuter réellement. En fait, le shell ajoute toujours les commandes au journal
+avant de les exécuter. Pourquoi pensez-vous qu'il fait cela ?
 
 :::::::::::::::  solution
 
 ## Solution
 
-If a command causes something to crash or hang, it might be useful
-to know what that command was, in order to investigate the problem.
-Were the command only be recorded after running it, we would not
-have a record of the last command run in the event of a crash.
+Si une commande provoque un problème de blocage ou de plantage, il peut être utile
+de savoir quelle était cette commande, afin de pouvoir enquêter sur le problème. Si la commande était enregistrée uniquement après son exécution, nous n'aurions pas
+d'enregistrement de la dernière commande exécutée en cas de plantage.
 
 
 
@@ -375,36 +364,36 @@ have a record of the last command run in the event of a crash.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-In practice, most people develop shell scripts by running commands
-at the shell prompt a few times
-to make sure they're doing the right thing,
-then saving them in a file for re-use.
-This style of work allows people to recycle
-what they discover about their data and their workflow with one call to `history`
-and a bit of editing to clean up the output
-and save it as a shell script.
+En pratique, la plupart des gens développent des scripts shell en exécutant des commandes
+à l'invite de commande quelques fois
+pour être sûr de faire ce qu'ils veulent,
+puis en les enregistrant dans un fichier pour une utilisation ultérieure.
+Ce mode de travail permet aux gens de recycler
+ce qu'ils découvrent sur leurs données et leur flux de travail avec un seul appel à `history`
+et un peu de modification pour nettoyer la sortie
+et l'enregistrer sous forme de script shell.
 
-## Nelle's Pipeline: Creating a Script
+## Pipeline de Nelle : Créer un Script
 
-Nelle's supervisor insisted that all her analytics must be reproducible.
-The easiest way to capture all the steps is in a script.
+Le superviseur de Nelle a insisté pour que toutes ses analyses soient reproductibles.
+La manière la plus simple de capturer toutes les étapes est dans un script.
 
-First we return to Nelle's project directory:
+D'abord, nous revenons dans le répertoire du projet de Nelle :
 
 ```bash
 $ cd ../../north-pacific-gyre/
 ```
 
-She creates a file using `nano` ...
+Elle crée un fichier en utilisant `nano` ...
 
 ```bash
 $ nano do-stats.sh
 ```
 
-...which contains the following:
+...qui contient ce qui suit :
 
 ```bash
-# Calculate stats for data files.
+# Calcul des statistiques pour les fichiers de données.
 for datafile in "$@"
 do
     echo $datafile
@@ -412,28 +401,28 @@ do
 done
 ```
 
-She saves this in a file called `do-stats.sh`
-so that she can now re-do the first stage of her analysis by typing:
+Elle enregistre cela dans un fichier appelé `do-stats.sh`
+de sorte qu'elle peut maintenant refaire la première étape de son analyse en tapant :
 
 ```bash
 $ bash do-stats.sh NENE*A.txt NENE*B.txt
 ```
 
-She can also do this:
+Elle peut également faire cela :
 
 ```bash
 $ bash do-stats.sh NENE*A.txt NENE*B.txt | wc -l
 ```
 
-so that the output is just the number of files processed
-rather than the names of the files that were processed.
+de sorte que la sortie soit juste le nombre de fichiers traités
+au lieu des noms des fichiers qui ont été traités.
 
-One thing to note about Nelle's script is that
-it lets the person running it decide what files to process.
-She could have written it as:
+Un point à noter sur le script de Nelle est que
+elle laisse la personne qui l'exécute décider quels fichiers traiter.
+Elle aurait pu l'écrire comme ceci :
 
 ```bash
-# Calculate stats for Site A and Site B data files.
+# Calcul des statistiques pour les fichiers de données des sites A et B.
 for datafile in NENE*A.txt NENE*B.txt
 do
     echo $datafile
@@ -441,60 +430,59 @@ do
 done
 ```
 
-The advantage is that this always selects the right files:
-she doesn't have to remember to exclude the 'Z' files.
-The disadvantage is that it *always* selects just those files --- she can't run it on all files
-(including the 'Z' files),
-or on the 'G' or 'H' files her colleagues in Antarctica are producing,
-without editing the script.
-If she wanted to be more adventurous,
-she could modify her script to check for command-line arguments,
-and use `NENE*A.txt NENE*B.txt` if none were provided.
-Of course, this introduces another tradeoff between flexibility and complexity.
+L'avantage est que cela sélectionne toujours les bons fichiers :
+elle n'a pas besoin de se rappeler d'exclure les fichiers 'Z'.
+L'inconvénient est que cela *seulement* sélectionne ces fichiers - elle ne peut pas l'exécuter sur tous les fichiers
+(y compris les fichiers 'Z'),
+ou sur les fichiers 'G' ou 'H' que ses collègues en Antarctique produisent,
+sans modifier le script.
+Si elle voulait être plus audacieuse,
+elle pourrait modifier son script pour vérifier les arguments de la ligne de commande,
+et utiliser `NENE*A.txt NENE*B.txt` s'il n'y en a pas de fournis.
+Bien sûr, cela introduit un autre compromis entre la flexibilité et la complexité.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Variables in Shell Scripts
+## Variables dans les Scripts Shell
 
-In the `alkanes` directory, imagine you have a shell script called `script.sh` containing the
-following commands:
+Dans le répertoire `alkanes`, imaginez que vous avez un script shell appelé `script.sh` contenant les
+commandes suivantes :
 
 ```bash
 head -n $2 $1
 tail -n $3 $1
 ```
 
-While you are in the `alkanes` directory, you type the following command:
+Pendant que vous êtes dans le répertoire `alkanes`, vous tapez la commande suivante :
 
 ```bash
 $ bash script.sh '*.pdb' 1 1
 ```
 
-Which of the following outputs would you expect to see?
+Parmi les sorties suivantes, à laquelle vous attendez-vous à voir ?
 
-1. All of the lines between the first and the last lines of each file ending in `.pdb`
-  in the `alkanes` directory
-2. The first and the last line of each file ending in `.pdb` in the `alkanes` directory
-3. The first and the last line of each file in the `alkanes` directory
-4. An error because of the quotes around `*.pdb`
+1. Toutes les lignes entre la première et la dernière ligne de chaque fichier se terminant par `.pdb` dans le répertoire `alkanes`
+2. La première et la dernière ligne de chaque fichier se terminant par `.pdb` dans le répertoire `alkanes`
+3. La première et la dernière ligne de chaque fichier dans le répertoire `alkanes`
+4. Une erreur en raison des guillemets autour de `*.pdb`
 
 :::::::::::::::  solution
 
 ## Solution
 
-The correct answer is 2.
+La bonne réponse est 2.
 
-The special variables `$1`, `$2` and `$3` represent the command line arguments given to the
-script, such that the commands run are:
+Les variables spéciales `$1`, `$2` et `$3` représentent les arguments de ligne de commande donnés au
+script, de sorte que les commandes exécutées sont :
 
 ```bash
 $ head -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
 $ tail -n 1 cubane.pdb ethane.pdb octane.pdb pentane.pdb propane.pdb
 ```
 
-The shell does not expand `'*.pdb'` because it is enclosed by quote marks.
-As such, the first argument to the script is `'*.pdb'` which gets expanded within the
-script by `head` and `tail`.
+Le shell n'élargit pas `'*.pdb'` car il est enfermé entre guillemets.
+Ainsi, le premier argument du script est `'*.pdb'` qui est ensuite élargi dans le
+script par `head` et `tail`.
 
 
 
@@ -504,21 +492,21 @@ script by `head` and `tail`.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Find the Longest File With a Given Extension
+## Trouver le fichier le plus long avec une extension donnée
 
-Write a shell script called `longest.sh` that takes the name of a
-directory and a filename extension as its arguments, and prints
-out the name of the file with the most lines in that directory
-with that extension. For example:
+Écrivez un script shell appelé `longest.sh` qui prend le nom d'un
+répertoire et une extension de fichier en argument, et affiche
+le nom du fichier ayant le plus de lignes dans ce répertoire
+avec cette extension. Par exemple :
 
 ```bash
 $ bash longest.sh shell-lesson-data/exercise-data/alkanes pdb
 ```
 
-would print the name of the `.pdb` file in `shell-lesson-data/exercise-data/alkanes` that has
-the most lines.
+afficherait le nom du fichier `.pdb` dans `shell-lesson-data/exercise-data/alkanes` qui a
+le plus de lignes.
 
-Feel free to test your script on another directory e.g.
+N'hésitez pas à tester votre script sur un autre répertoire, par exemple :
 
 ```bash
 $ bash longest.sh shell-lesson-data/exercise-data/writing txt
@@ -529,37 +517,33 @@ $ bash longest.sh shell-lesson-data/exercise-data/writing txt
 ## Solution
 
 ```bash
-# Shell script which takes two arguments:
-#    1. a directory name
-#    2. a file extension
-# and prints the name of the file in that directory
-# with the most lines which matches the file extension.
+# Script shell qui prend deux arguments :
+#    1. un nom de répertoire
+#    2. une extension de fichier
+# et affiche le nom du fichier dans le répertoire
+# qui a le plus de lignes et qui correspond à l'extension du fichier.
 
 wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
 ```
 
-The first part of the pipeline, `wc -l $1/*.$2 | sort -n`, counts
-the lines in each file and sorts them numerically (largest last). When
-there's more than one file, `wc` also outputs a final summary line,
-giving the total number of lines across *all* files.  We use `tail -n 2 | head -n 1` to throw away this last line.
+La première partie du pipeline, `wc -l $1/*.$2 | sort -n`, compte
+le nombre de lignes dans chaque fichier et les trie numériquement (les plus grands en dernier). Lorsqu'il
+y a plus d'un fichier, `wc` produit également une ligne de synthèse finale,
+donnant le nombre total de lignes sur l'ensemble des fichiers. Nous utilisons `tail -n 2 | head -n 1` pour ignorer cette dernière ligne.
 
-With `wc -l $1/*.$2 | sort -n | tail -n 1` we'll see the final summary
-line: we can build our pipeline up in pieces to be sure we understand
-the output.
+Avec `wc -l $1/*.$2 | sort -n | tail -n 1`, nous verrons la synthèse finale
+ligne : nous pouvons construire notre pipeline progressivement pour être sûr de comprendre
+la sortie.
 
-:::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::  challenge
 
-::::::::::::::::::::::::::::::::::::::::::::::::::
+## Compréhension de Scripts
 
-:::::::::::::::::::::::::::::::::::::::  challenge
-
-## Script Reading Comprehension
-
-For this question, consider the `shell-lesson-data/exercise-data/alkanes` directory once again.
-This contains a number of `.pdb` files in addition to any other files you
-may have created.
-Explain what each of the following three scripts would do when run as
-`bash script1.sh *.pdb`, `bash script2.sh *.pdb`, and `bash script3.sh *.pdb` respectively.
+Pour cette question, considérez à nouveau le répertoire `shell-lesson-data/exercise-data/alkanes`.
+Celui-ci contient un certain nombre de fichiers `.pdb` en plus de tous les autres fichiers que vous
+avez pu créer.
+Expliquez ce que chacun des trois scripts suivants ferait lorsqu'ils sont exécutés comme
+`bash script1.sh *.pdb`, `bash script2.sh *.pdb` et `bash script3.sh *.pdb` respectivement.
 
 ```bash
 # Script 1
@@ -583,18 +567,17 @@ echo $@.pdb
 
 ## Solutions
 
-In each case, the shell expands the wildcard in `*.pdb` before passing the resulting
-list of file names as arguments to the script.
+Dans chaque cas, le shell développe le caractère générique dans `*.pdb` avant de passer la liste résultante de noms de fichiers en tant qu'arguments au script.
 
-Script 1 would print out a list of all files containing a dot in their name.
-The arguments passed to the script are not actually used anywhere in the script.
+Le script 1 imprimerait une liste de tous les fichiers contenant un point dans leur nom.
+Les arguments transmis au script ne sont en fait utilisés nulle part dans le script.
 
-Script 2 would print the contents of the first 3 files with a `.pdb` file extension.
-`$1`, `$2`, and `$3` refer to the first, second, and third argument respectively.
+Le script 2 imprimerait le contenu des 3 premiers fichiers avec l'extension de fichier `.pdb`.
+`$1`, `$2` et `$3` se réfèrent respectivement au premier, deuxième et troisième argument.
 
-Script 3 would print all the arguments to the script (i.e. all the `.pdb` files),
-followed by `.pdb`.
-`$@` refers to *all* the arguments given to a shell script.
+Le script 3 afficherait tous les arguments du script (c'est-à-dire tous les fichiers `.pdb`),
+suivis de `.pdb`.
+`$@` se réfère à *tous* les arguments donnés à un script shell.
 
 ```output
 cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
@@ -606,10 +589,10 @@ cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Debugging Scripts
+## Déboguer des Scripts
 
-Suppose you have saved the following script in a file called `do-errors.sh`
-in Nelle's `north-pacific-gyre` directory:
+Supposons que vous ayez enregistré le script suivant dans un fichier appelé `do-errors.sh`
+dans le répertoire `north-pacific-gyre` de Nelle :
 
 ```bash
 # Calculate stats for data files.
@@ -620,31 +603,31 @@ do
 done
 ```
 
-When you run it from the `north-pacific-gyre` directory:
+Lorsque vous l'exécutez à partir du répertoire `north-pacific-gyre` :
 
 ```bash
 $ bash do-errors.sh NENE*A.txt NENE*B.txt
 ```
 
-the output is blank.
-To figure out why, re-run the script using the `-x` option:
+la sortie est vide.
+Pour comprendre pourquoi, réexécutez le script en utilisant l'option `-x` :
 
 ```bash
 $ bash -x do-errors.sh NENE*A.txt NENE*B.txt
 ```
 
-What is the output showing you?
-Which line is responsible for the error?
+Que vous montre la sortie ?
+Quelle ligne est responsable de l'erreur ?
 
 :::::::::::::::  solution
 
 ## Solution
 
-The `-x` option causes `bash` to run in debug mode.
-This prints out each command as it is run, which will help you to locate errors.
-In this example, we can see that `echo` isn't printing anything. We have made a typo
-in the loop variable name, and the variable `datfile` doesn't exist, hence returning
-an empty string.
+L'option `-x` permet à `bash` de s'exécuter en mode de débogage.
+Cela affiche chaque commande au fur et à mesure de son exécution, ce qui vous aidera à localiser les erreurs.
+Dans cet exemple, nous pouvons voir que `echo` n'imprime rien. Nous avons fait une faute de frappe
+dans le nom de la variable de la boucle, et la variable `datfile` n'existe pas, ce qui renvoie donc
+une chaîne vide.
 
 
 
@@ -656,13 +639,12 @@ an empty string.
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
-- Save commands in files (usually called shell scripts) for re-use.
-- `bash [filename]` runs the commands saved in a file.
-- `$@` refers to all of a shell script's command-line arguments.
-- `$1`, `$2`, etc., refer to the first command-line argument, the second command-line argument, etc.
-- Place variables in quotes if the values might have spaces in them.
-- Letting users decide what files to process is more flexible and more consistent with built-in Unix commands.
+- Enregistrez les commandes dans des fichiers (généralement appelés scripts shell) pour les réutiliser.
+- `bash [nom_fichier]` exécute les commandes enregistrées dans un fichier.
+- `$@` fait référence à tous les arguments de la ligne de commande d'un script shell.
+- `$1`, `$2`, etc., font référence au premier argument de la ligne de commande, au deuxième argument de la ligne de commande, etc.
+- Placez les variables entre guillemets si les valeurs peuvent contenir des espaces.
+- Permettre aux utilisateurs de décider quels fichiers traiter est plus flexible et plus cohérent avec les commandes Unix intégrées.
 
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
+----------------------------
 
